@@ -2,11 +2,13 @@ const Express = require("express");
 const BodyParser = require("body-parser");
 const mongoDB = require("mongoose");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 const app = Express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 
-mongoDB.connect("mongodb://127.0.0.1:27017/ExampleDB");
+
+mongoDB.connect(`${process.env.MONGOURL}/ExampleDB`);
 
 
 const userSchema = new mongoDB.Schema({
@@ -29,36 +31,42 @@ app.get("/signup", (req, res) => {
 })
 
 app.post("/signup", async(req, res) => {
-    const Email = req.body.uEmail;
-    const Password = req.body.uPassword;
+    try{
+        const Email = req.body.uEmail;
+        const Password = req.body.uPassword;
 
-    if (!Email || !Password) {
-        res.status(500).send("<h1>Please enter the fields</h1>");
+        if(!Email || !Password){
+            res.send("Please enter the fields");
+        }
+    
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(Password,salt);
+    
+        const newUser = new user({
+            email: Email,
+            password:hash
+        });
+    
+        newUser.save();
+    
+        res.send("<h1>Signed up</h1>")
+    }catch(error){
+        res.status(500).send(error);
     }
-
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(Password,salt);
-
-    const newUser = new user({
-        email: Email,
-        password:hash
-    });
-
-    newUser.save();
-
-    res.send("<h1>Signed up</h1>")
+   
 
 })
 
 
 
 app.post("/login", async (req, res) => {
-
-    const Email = req.body.uEmail;
+    try{
+        const Email = req.body.uEmail;
     const Password = req.body.uPassword;
 
     if (!Email || !Password) {
-        res.status(500).send("<h1>Please enter the fields</h1>");
+        // res.status(402).send("<h1>Please enter the fields</h1>");
+        throw new error("Please enter the fields");
     }
 
     const userDetail = await user.findOne({ "email": Email });
@@ -74,13 +82,17 @@ app.post("/login", async (req, res) => {
     }
 
     res.send("logged in");
-
+    }
+    catch(error){
+        res.status(500).send(error);
+    }
 
 })
 
 
 app.post("/forgotPassword",async(req,res)=>{
-    const Email = req.body.uEmail;
+    try{
+        const Email = req.body.uEmail;
     const Password = req.body.uPassword;
 
     const data = await user.findOne({ "email": Email });
@@ -95,6 +107,11 @@ app.post("/forgotPassword",async(req,res)=>{
     await user.updateOne({"email":data.email},{"password":hash});
     
      res.send({"Message":"Update success"});
+    }
+    catch(error){
+        res.status(500).send(error);
+    }
+    
 
 })
 
@@ -122,9 +139,7 @@ app.post("/contact", (req, res) => {
 
 
 app.listen(PORT, () => {
-    console.log("serving on port 5000");
+    console.log(`serving on port ${PORT}`);
 })
-
-
 
 
