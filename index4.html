@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css</title>
+    <style>
+        h1,h2{
+           background-color: red; 
+          display: inline;
+         width: 100px;
+         height: 100px;
+        }
+
+        p{
+            background-color: blue;
+        }
+
+        #container{
+            width: 500px;
+            height: 200px;
+            background-color: chartreuse;
+            padding: 40px 20px 30px 20px;
+            border: 4px solid black;
+            border-top: none;
+            margin: 50px;
+            display: flex;
+            justify-content:flex-end;
+            align-items: center;
+        }
+
+        #main{
+            width: 100px;
+            height: 100px;
+            background-color: chocolate;
+            display: flex;
+            justify-content: space-evenly;
+            border: 2px solid black;
+            align-items: center;
+        }
+
+        /* @media(max-width:300px){
+            body{
+                background-color: darkcyan;
+            }
+            #container{
+                background-color: darkgoldenrod;
+            }
+        } */
+    </style>
+</head>
+<body>
+    <!-- <h1>this is hOne</h1>
+    <h2>this is hTwo</h2>
+    <h3>this is hTwo</h3> -->
+
+    <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores, illum!
+    </p>
+     
+    <div id="container">
+        <div id="main">
+             <h3>Box</h3>
+        </div>
+        <div id="main">
+            <h3>Box</h3>
+       </div>
+       <div id="main">
+        <h3>Box</h3>
+   </div>
+   <div id="main">
+    <h3>Box</h3>
+</div>
+    </div>
+</body>
+</html>
